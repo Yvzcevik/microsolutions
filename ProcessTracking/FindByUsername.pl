@@ -1,3 +1,8 @@
+# This code has 3 steps as follows:
+#   1-) Listing all usernames in a local machine.
+#   2-) Choosing a user by taking an input from user.
+#   3-) Listing all processes run by choosed user.
+
 #!/usr/bin/perl
 
 use strict;
