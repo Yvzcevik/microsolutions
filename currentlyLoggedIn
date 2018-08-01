@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#This script will return two different outpu:
+#	true : if a user currently logged in
+# false : if no one currently logged in
