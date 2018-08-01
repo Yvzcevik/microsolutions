@@ -2,7 +2,7 @@
 #This script will return two different outpu:
 #	true : if a user currently logged in
 # false : if no one currently logged in
-stdbuf -oL utmpdump /var/run/utmp | grep "$year" | grep "$dayStr $month $dayNum" |
+stdbuf -oL utmpdump /var/run/utmp |
 while IFS= read -r line
 do
   IN="$line"
