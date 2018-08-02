@@ -2,7 +2,8 @@
 #This script will return two different outpu:
 #	true : if a user currently logged in
 # false : if no one currently logged in
-stdbuf -oL utmpdump /var/run/utmp |
+
+stdbuf -oL who /var/run/utmp | grep "(:0) |
 while IFS= read -r line
 do
   IN="$line"
@@ -11,9 +12,8 @@ do
   IFS=']'; arrINCLI=($IN); unset IFS;
   #Excluding whitespaces and '[' character
   iflocal="$(echo -e "${arrINCLI[5]}" | sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' -e 's/^\[//')"
-  iftty="$(echo -e "${arrINCLI[4]}" | sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' -e 's/^\[//')"
   #Excluding outputs except physical GUI logins
-  if [ "${arrINCLI[0]}" = "[7" ] && [ "$iflocal" = ":0" ] && [[ $iftty =~ [tty.] ]]
+  if [ "$iflocal" = ":0" ]
     then
     touch /tmp/currentlyLoggedInFlagTrue.info
     chmod 777 /tmp/currentlyLoggedInFlagTrue.info
@@ -27,3 +27,31 @@ if [ -e "/tmp/currentlyLoggedInFlagTrue.info" ]
 else
       echo "false"
 fi
+
+#THIS COMMENT BLOCK IS AN OLD VERSION OF THE CODE. A QUESTION WILL BE PRODUCED FROM THESE COMMENT LINES THEREFORE 
+# THEY WERE PRESERVED.
+#stdbuf -oL utmpdump /var/run/utmp |
+#while IFS= read -r line
+#do
+#  IN="$line"
+#  arrINCLI=(${IN//[/[})
+#  #Lines have whitespaces so we need to use IFS here
+#  IFS=']'; arrINCLI=($IN); unset IFS;
+#  #Excluding whitespaces and '[' character
+#  iflocal="$(echo -e "${arrINCLI[5]}" | sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' -e 's/^\[//')"
+#  iftty="$(echo -e "${arrINCLI[4]}" | sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' -e 's/^\[//')"
+  #Excluding outputs except physical GUI logins
+#  if [ "${arrINCLI[0]}" = "[7" ] && [ "$iflocal" = ":0" ] && [[ $iftty =~ [tty.] ]]
+#    then
+#    touch /tmp/currentlyLoggedInFlagTrue.info
+#    chmod 777 /tmp/currentlyLoggedInFlagTrue.info
+#  fi
+#done
+
+#if [ -e "/tmp/currentlyLoggedInFlagTrue.info" ]
+#      then
+#      echo "true"
+#      rm /tmp/currentlyLoggedInFlagTrue.info
+#else
+#      echo "false"
+#fi
