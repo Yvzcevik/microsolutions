@@ -3,15 +3,13 @@
 #	true : if a user currently logged in
 # false : if no one currently logged in
 
-stdbuf -oL who /var/run/utmp | grep "(:0) |
+stdbuf -oL who /var/run/utmp | grep "(:0)" |
 while IFS= read -r line
 do
   IN="$line"
-  arrINCLI=(${IN//[/[})
-  #Lines have whitespaces so we need to use IFS here
-  IFS=']'; arrINCLI=($IN); unset IFS;
-  #Excluding whitespaces and '[' character
-  iflocal="$(echo -e "${arrINCLI[5]}" | sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' -e 's/^\[//')"
+  arrINCLI=(${IN})
+  #Excluding whitespaces, "(" and ")" characters
+  iflocal="$(echo -e "${arrINCLI[4]}" | sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' -e 's/)$//' -e 's/^(//')"
   #Excluding outputs except physical GUI logins
   if [ "$iflocal" = ":0" ]
     then
